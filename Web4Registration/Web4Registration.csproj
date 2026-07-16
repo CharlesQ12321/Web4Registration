@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- 直接引用原 RegistrationManager.dll -->
+  <ItemGroup>
+    <Reference Include="RegistrationManager">
+      <HintPath>..\RegistrationManager.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

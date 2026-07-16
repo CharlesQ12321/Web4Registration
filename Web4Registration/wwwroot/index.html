@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>激活码生成工具</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "Microsoft YaHei", Arial, sans-serif; background: #f0f2f5; padding: 40px; }
+        .container { max-width: 520px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 8px; color: #333; }
+        .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
+        textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; resize: vertical; font-size: 14px; }
+        button { width: 100%; padding: 12px; background: #1677ff; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 12px; }
+        button:hover { background: #4096ff; }
+        button:disabled { background: #a0c4ff; cursor: not-allowed; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; display: none; }
+        .result.success { background: #f6ffed; border: 1px solid #b7eb8f; display: block; }
+        .result.error { background: #fff2f0; border: 1px solid #ffccc7; display: block; }
+        .result strong { display: block; margin-bottom: 6px; }
+        .result p { word-break: break-all; font-family: Consolas, monospace; font-size: 13px; color: #333; }
+        .loading { display: none; text-align: center; margin-top: 12px; color: #888; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>激活码生成工具</h2>
+        <p class="subtitle">通过 RegistrationManager.GetUserCode() 获取用户码后粘贴到下方</p>
+        <textarea id="userCodeInput" placeholder="请粘贴您的用户码..."></textarea>
+        <button id="submitBtn" onclick="getActivationCode()">生成激活码</button>
+        <div class="loading" id="loadingArea">正在生成，请稍候...</div>
+        <div class="result" id="resultArea">
+            <strong>激活码：</strong>
+            <p id="activationCodeResult"></p>
+        </div>
+        <div class="result" id="errorArea">
+            <strong style="color:#ff4d4f;">错误：</strong>
+            <p id="errorMessage" style="color:#ff4d4f;"></p>
+        </div>
+    </div>
+
+    <script>
+        async function getActivationCode() {
+            const userCode = document.getElementById('userCodeInput').value.trim();
+            if (!userCode) { alert('请先输入用户码'); return; }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            document.getElementById('loadingArea').style.display = 'block';
+            document.getElementById('resultArea').className = 'result';
+            document.getElementById('errorArea').className = 'result';
+
+            try {
+                const response = await fetch('/api/activation/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userCode })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('activationCodeResult').textContent = data.activationCode;
+                    document.getElementById('resultArea').className = 'result success';
+                } else {
+                    document.getElementById('errorMessage').textContent = data.message || '生成失败';
+                    document.getElementById('errorArea').className = 'result error';
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = '网络请求失败：' + error.message;
+                document.getElementById('errorArea').className = 'result error';
+            } finally {
+                btn.disabled = false;
+                document.getElementById('loadingArea').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
