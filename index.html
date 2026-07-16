@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>激活码生成工具</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: "Microsoft YaHei", Arial, sans-serif; background: #f0f2f5; padding: 40px; }
@@ -40,7 +41,46 @@
     </div>
 
     <script>
-        async function getActivationCode() {
+        // DES 密钥和向量（与原 RegistrationManager.dll 完全一致）
+        const CLIENT_KEY = CryptoJS.enc.Utf8.parse(String.fromCharCode(1, 3, 5, 7, 9, 11, 13, 15));
+        const CLIENT_IV  = CryptoJS.enc.Utf8.parse(String.fromCharCode(17, 19, 21, 23, 25, 27, 29, 31));
+        const SERVER_KEY = CryptoJS.enc.Utf8.parse(String.fromCharCode(2, 4, 6, 8, 10, 12, 14, 16));
+        const SERVER_IV  = CryptoJS.enc.Utf8.parse(String.fromCharCode(18, 20, 22, 24, 26, 28, 30, 32));
+
+        function clientDesDecrypt(encryptedText) {
+            try {
+                encryptedText = encryptedText.replace(/_%_/g, '/').replace(/-%-/g, '+');
+                const decrypted = CryptoJS.DES.decrypt(encryptedText, CLIENT_KEY, {
+                    iv: CLIENT_IV,
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+                return decrypted.toString(CryptoJS.enc.Utf8);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function serverDesEncrypt(plainText) {
+            const encrypted = CryptoJS.DES.encrypt(plainText, SERVER_KEY, {
+                iv: SERVER_IV,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return encrypted.toString();
+        }
+
+        function generateVipCode(userCode) {
+            try {
+                const decrypted = clientDesDecrypt(userCode);
+                if (!decrypted) return null;
+                return serverDesEncrypt(decrypted);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function getActivationCode() {
             const userCode = document.getElementById('userCodeInput').value.trim();
             if (!userCode) { alert('请先输入用户码'); return; }
 
@@ -51,21 +91,16 @@
             document.getElementById('errorArea').className = 'result';
 
             try {
-                const response = await fetch('/api/activation/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userCode })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    document.getElementById('activationCodeResult').textContent = data.activationCode;
+                const activationCode = generateVipCode(userCode);
+                if (activationCode) {
+                    document.getElementById('activationCodeResult').textContent = activationCode;
                     document.getElementById('resultArea').className = 'result success';
                 } else {
-                    document.getElementById('errorMessage').textContent = data.message || '生成失败';
+                    document.getElementById('errorMessage').textContent = '用户码无效，请检查后重新输入';
                     document.getElementById('errorArea').className = 'result error';
                 }
             } catch (error) {
-                document.getElementById('errorMessage').textContent = '网络请求失败：' + error.message;
+                document.getElementById('errorMessage').textContent = '生成失败：' + error.message;
                 document.getElementById('errorArea').className = 'result error';
             } finally {
                 btn.disabled = false;
