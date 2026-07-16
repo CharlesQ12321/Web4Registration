@@ -6,6 +6,7 @@
     <title>激活码生成工具</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="validity.js"></script>
+    <script async src="//busuanzi.ibruce.info/busuanzi.pure.mini.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: "Microsoft YaHei", Arial, sans-serif; background: #f0f2f5; padding: 40px; }
@@ -22,6 +23,7 @@
         .result strong { display: block; margin-bottom: 6px; }
         .result p { word-break: break-all; font-family: Consolas, monospace; font-size: 13px; color: #333; }
         .loading { display: none; text-align: center; margin-top: 12px; color: #888; }
+        .visitor-count { text-align: center; margin-top: 20px; font-size: 12px; color: #aaa; }
     </style>
 </head>
 <body>
@@ -39,6 +41,9 @@
             <strong style="color:#ff4d4f;">错误：</strong>
             <p id="errorMessage" style="color:#ff4d4f;"></p>
         </div>
+        <p class="visitor-count">
+            本站总访问量 <span id="busuanzi_value_site_pv">-</span> 次
+        </p>
     </div>
 
     <script>
