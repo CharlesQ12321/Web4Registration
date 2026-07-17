@@ -6,7 +6,8 @@
     <title>激活码生成工具</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="validity.js"></script>
-    <script defer src="https://cn.vercount.one/js/count.js"></script>
+    <!-- 使用 Vercount 官方推荐的统计脚本 -->
+    <script defer src="https://events.vercount.one/js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: "Microsoft YaHei", Arial, sans-serif; background: #f0f2f5; padding: 40px; }
@@ -41,8 +42,9 @@
             <strong style="color:#ff4d4f;">错误：</strong>
             <p id="errorMessage" style="color:#ff4d4f;"></p>
         </div>
+        <!-- 修正统计显示标签，使用 Vercount 官方 ID -->
         <p class="visitor-count">
-            本站总访问量 <span id="busuanzi_value_site_pv">-</span> 次
+            本站总访问量 <span id="vercount_value_site_pv">Loading</span> 次
         </p>
     </div>
 
