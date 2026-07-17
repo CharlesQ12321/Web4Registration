@@ -67,11 +67,11 @@
                     <a href="#cases" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="cases">
                         应用案例
                     </a>
+                    <a href="#partners" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="partners">
+                        赞助伙伴
+                    </a>
                     <a href="#links" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="links">
                         友情链接
-                    </a>
-                    <a href="#partners" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="partners">
-                        合作单位
                     </a>
                 </div>
                 <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors ml-2" aria-label="打开菜单">
@@ -85,8 +85,8 @@
                 <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-left hover:text-primary transition-colors duration-200">返回顶部</button>
                 <a href="#install" class="hover:text-primary transition-colors duration-200">安装激活</a>
                 <a href="#cases" class="hover:text-primary transition-colors duration-200">应用案例</a>
+                <a href="#partners" class="hover:text-primary transition-colors duration-200">赞助伙伴</a>
                 <a href="#links" class="hover:text-primary transition-colors duration-200">友情链接</a>
-                <a href="#partners" class="hover:text-primary transition-colors duration-200">合作单位</a>
             </div>
         </div>
     </nav>
@@ -102,21 +102,21 @@
                 <div class="fade-in">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
                         <span class="w-2 h-2 rounded-full bg-primary"></span>
-                        Grasshopper 结构设计插件
+                        量化结构设计出品
                     </div>
                     <h1 class="font-outfit text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-brandtext mb-6">
                         让结构设计<br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">更高效、更智能</span>
                     </h1>
                     <p class="text-lg text-brandtext/70 mb-8 max-w-lg leading-relaxed">
-                        IronMan 插件为建筑师与结构工程师提供 ALC 横条板排布、构件截面优化等 Grasshopper 脚本工具，助力参数化设计落地。
+                        IronMan 是一款基于 Rhino 8 软件平台的结构设计辅助插件。它是作者从事建筑结构设计工作十多年的经验结晶。基于这款插件，作者编制了许多结合业务落地的Grasshopper脚本文件，详情请见应用案例部分。
                     </p>
                     <div class="flex flex-wrap gap-4">
                         <a id="heroDownloadBtn" href="#" class="inline-flex items-center px-6 py-3 rounded-xl bg-cta text-white font-semibold hover:bg-orange-600 transition-colors duration-200 shadow-lg shadow-orange-500/25 cursor-pointer">
                             下载插件
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         </a>
-                        <a href="#install" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-brandtext font-semibold border border-gray-200 hover:border-primary hover:text-primary transition-colors duration-200 cursor-pointer">
+                        <a onclick="scrollToActivation()" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-brandtext font-semibold border border-gray-200 hover:border-primary hover:text-primary transition-colors duration-200 cursor-pointer">
                             立即激活
                         </a>
                         <a href="#cases" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-brandtext font-semibold border border-gray-200 hover:border-primary hover:text-primary transition-colors duration-200 cursor-pointer">
@@ -141,7 +141,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
                 <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">安装与激活</h2>
-                <p class="text-brandtext/70">按照以下步骤完成插件安装，并在下方输入用户码生成激活码。</p>
+                <p class="text-brandtext/70">按照以下步骤完成插件安装与激活。</p>
             </div>
 
             <!-- 图文步骤 -->
@@ -149,24 +149,6 @@
                 <!-- 由 JS 渲染 -->
             </div>
 
-            <!-- 激活码生成 -->
-            <div class="max-w-xl mx-auto bg-white rounded-2xl p-8 shadow-lg border border-primary/10 fade-in">
-                <h3 class="font-outfit text-xl font-semibold text-brandtext mb-2">激活码生成</h3>
-                <p class="text-sm text-brandtext/60 mb-6">通过 IronMan 插件的 GhcRegister 电池获取本机用户码后粘贴到下方。</p>
-                <textarea id="userCodeInput" class="w-full h-28 p-4 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-y text-sm" placeholder="请粘贴您的用户码..."></textarea>
-                <button id="submitBtn" onclick="getActivationCode()" class="w-full mt-4 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-sky-600 transition-colors duration-200 disabled:bg-primary/50 disabled:cursor-not-allowed cursor-pointer">
-                    生成激活码
-                </button>
-                <div id="loadingArea" class="hidden text-center mt-3 text-sm text-brandtext/60">正在生成，请稍候...</div>
-                <div id="resultArea" class="hidden mt-4 p-4 rounded-xl bg-green-50 border border-green-200">
-                    <strong class="block text-green-800 mb-1">激活码：</strong>
-                    <p id="activationCodeResult" class="break-all font-mono text-sm text-green-900"></p>
-                </div>
-                <div id="errorArea" class="hidden mt-4 p-4 rounded-xl bg-red-50 border border-red-200">
-                    <strong class="block text-red-800 mb-1">错误：</strong>
-                    <p id="errorMessage" class="text-sm text-red-700"></p>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -175,9 +157,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
                 <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">应用案例展示</h2>
-                <p class="text-brandtext/70">IronMan 插件在实际项目中的应用效果，图片与说明随文件夹内容自动同步。</p>
+                <p class="text-brandtext/70">这些结合IronMan插件编写的GH脚本文件均在多个项目中有实际应用。</p>
             </div>
             <div id="caseStudies" class="space-y-12">
+                <!-- 由 JS 渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 赞助伙伴 -->
+    <section id="partners" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
+                <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">赞助伙伴</h2>
+                <p class="text-brandtext/70">您的赞助让这个项目变得更好！</p>
+            </div>
+            <div id="partnersList" class="flex flex-wrap justify-center items-center gap-8 md:gap-12 fade-in">
                 <!-- 由 JS 渲染 -->
             </div>
         </div>
@@ -188,35 +183,18 @@
         <div class="max-w-6xl mx-auto">
             <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
                 <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">友情链接</h2>
-                <p class="text-brandtext/70">扫描二维码关注我们的视频号与公众号，获取更多教程资讯。</p>
+                <p class="text-brandtext/70">扫描二维码，获取更多优质资源。</p>
             </div>
-            <div id="qrCodes" class="grid grid-cols-2 md:grid-cols-4 gap-6 fade-in">
-                <!-- 由 JS 渲染 -->
-            </div>
-        </div>
-    </section>
-
-    <!-- 合作单位 -->
-    <section id="partners" class="py-20 bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
-                <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">合作单位</h2>
-                <p class="text-brandtext/70">携手行业伙伴，共同推动结构设计的数字化升级。</p>
-            </div>
-            <div id="partnersList" class="flex flex-wrap justify-center items-center gap-8 md:gap-12 fade-in">
+            <div id="qrCodes" class="flex flex-wrap justify-center gap-4 fade-in">
                 <!-- 由 JS 渲染 -->
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-10 bg-brandtext text-white">
+    <footer class="py-8 bg-brandtext text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex items-center justify-center gap-2 mb-4 font-outfit font-bold text-lg">
-                <img src="插件logo/精钢侠头像.png" alt="精钢侠" class="w-8 h-8 rounded-full object-contain bg-white/20">
-                IronMan
-            </div>
-            <p class="text-white/60 text-sm mb-4">Grasshopper 结构设计插件</p>
+            <img src="插件logo/账号名称logo.png" alt="IronMan" class="mx-auto mb-4 h-12 object-contain">
             <p class="text-white/40 text-xs">
                 本站总访问量 <span id="vercount_value_site_pv">Loading</span> 次
             </p>
@@ -231,6 +209,24 @@
         </button>
     </div>
 
+    <!-- 赞助弹窗 -->
+    <div id="sponsorModal" class="fixed inset-0 z-[70] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <button onclick="closeSponsorModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 p-1" aria-label="关闭">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <h3 class="font-outfit text-xl font-bold text-brandtext text-center mb-4">感谢支持</h3>
+            <div class="flex justify-center mb-4">
+                <img src="%E8%B5%9E%E5%8A%A9/%E8%B5%9E%E5%8A%A9%E4%BA%8C%E7%BB%B4%E7%A0%81.png" alt="赞助二维码" class="w-48 h-48 object-contain rounded-xl">
+            </div>
+            <div class="text-sm text-brandtext/70 text-center space-y-1">
+                <p>山水有相逢，静待知音人。</p>
+                <p>个人赞助 ≥200 元，可添加作者私人微信获取技术指导。</p>
+                <p>企业赞助，将永久列入"赞助伙伴"鸣谢墙。</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 移动端菜单切换
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -238,6 +234,15 @@
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
+
+        // 滚动到激活表单（带导航栏偏移）
+        function scrollToActivation() {
+            const el = document.getElementById('activationFormSection');
+            if (el) {
+                const offset = el.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+            }
+        }
 
         // HTML 转义
         function escapeHtml(text) {
@@ -303,11 +308,32 @@
                 }).join('');
 
                 // 图片列
-                const imageHtml = imgSrc
-                    ? `<div style="width: 100%; border-radius: 0.75rem; overflow: hidden; background-color: white; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;" onclick="openLightbox('${imgSrc}')">
+                let imageHtml;
+                if (imgSrc === 'activation-form') {
+                    imageHtml = `<div id="activationFormSection" class="bg-white rounded-2xl p-6 shadow-lg border border-primary/10 w-full">
+                        <h3 class="font-outfit text-xl font-semibold text-brandtext mb-2">激活码生成</h3>
+                        <p class="text-sm text-brandtext/60 mb-4">通过 IronMan 插件的 GhcRegister 电池获取本机用户码后粘贴到下方。</p>
+                        <textarea id="userCodeInput" class="w-full h-24 p-4 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-y text-sm" placeholder="请粘贴您的用户码..."></textarea>
+                        <button id="submitBtn" onclick="getActivationCode()" class="w-full mt-3 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-sky-600 transition-colors duration-200 disabled:bg-primary/50 disabled:cursor-not-allowed cursor-pointer">
+                            生成激活码
+                        </button>
+                        <div id="loadingArea" class="hidden text-center mt-3 text-sm text-brandtext/60">正在生成，请稍候...</div>
+                        <div id="resultArea" class="hidden mt-3 p-3 rounded-xl bg-green-50 border border-green-200">
+                            <strong class="block text-green-800 mb-1">激活码：</strong>
+                            <p id="activationCodeResult" class="break-all font-mono text-sm text-green-900"></p>
+                        </div>
+                        <div id="errorArea" class="hidden mt-3 p-3 rounded-xl bg-red-50 border border-red-200">
+                            <strong class="block text-red-800 mb-1">错误：</strong>
+                            <p id="errorMessage" class="text-sm text-red-700"></p>
+                        </div>
+                    </div>`;
+                } else if (imgSrc) {
+                    imageHtml = `<div style="width: 100%; border-radius: 0.75rem; overflow: hidden; background-color: white; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;" onclick="openLightbox('${imgSrc}')">
                         <img src="${imgSrc}" alt="步骤配图" style="width: 100%; height: ${IMG_HEIGHT}; object-fit: contain;">
-                       </div>`
-                    : `<div style="height: ${IMG_HEIGHT}; width: 100%; border-radius: 0.75rem; background-color: #f9fafb; border: 1px dashed #e5e7eb; display: flex; align-items: center; justify-content: center; color: rgba(12, 74, 110, 0.3); font-size: 0.875rem;">暂无配图</div>`;
+                       </div>`;
+                } else {
+                    imageHtml = `<div style="height: ${IMG_HEIGHT}; width: 100%; border-radius: 0.75rem; background-color: #f9fafb; border: 1px dashed #e5e7eb; display: flex; align-items: center; justify-content: center; color: rgba(12, 74, 110, 0.3); font-size: 0.875rem;">暂无配图</div>`;
+                }
 
                 return `
                     <div class="grid lg:grid-cols-2 gap-8 items-stretch" style="width: 100%; display: grid; grid-template-columns: 1fr 1fr;">
@@ -324,7 +350,7 @@
 
         // 滚动高亮导航
         function setupScrollSpy() {
-            const sections = ['install', 'cases', 'links', 'partners'];
+            const sections = ['install', 'cases', 'partners', 'links'];
             const navBtns = document.querySelectorAll('.nav-btn[data-section]');
             const navHeight = 60;
 
@@ -390,8 +416,8 @@
                 return;
             }
             container.innerHTML = items.map(item => `
-                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 text-center">
-                    <div class="aspect-square rounded-xl overflow-hidden bg-gray-50 mb-3 mx-auto" style="width: 80%; max-width: 200px;">
+                <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 text-center" style="width: 180px;">
+                    <div class="aspect-square rounded-lg overflow-hidden bg-gray-50 mb-2 mx-auto" style="width: 140px;">
                         <img src="${item.src}" alt="${escapeHtml(item.name)}" class="w-full h-full object-contain">
                     </div>
                     <p class="text-sm font-medium text-brandtext">${escapeHtml(item.name)}</p>
@@ -399,12 +425,12 @@
             `).join('');
         }
 
-        // 渲染合作单位
+        // 渲染赞助伙伴
         function renderPartners() {
             const container = document.getElementById('partnersList');
             const items = window.siteData?.partners || [];
             if (items.length === 0) {
-                container.innerHTML = '<p class="text-center text-brandtext/50">暂无合作单位</p>';
+                container.innerHTML = '<p class="text-center text-brandtext/50">暂无赞助伙伴</p>';
                 return;
             }
             container.innerHTML = items.map(item => `
@@ -416,6 +442,19 @@
                 </div>
             `).join('');
         }
+
+        // 赞助弹窗
+        function openSponsorModal() {
+            document.getElementById('sponsorModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSponsorModal() {
+            document.getElementById('sponsorModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSponsorModal();
+        });
 
         // 激活码生成
         function getActivationCode() {
@@ -433,6 +472,7 @@
                 if (activationCode) {
                     document.getElementById('activationCodeResult').textContent = activationCode;
                     document.getElementById('resultArea').classList.remove('hidden');
+                    openSponsorModal();
                 } else {
                     document.getElementById('errorMessage').textContent = '用户码无效，请检查后重新输入';
                     document.getElementById('errorArea').classList.remove('hidden');

@@ -6,14 +6,14 @@ window.siteData = {
         "steps": [
           {
             "number": 1,
-            "text": "插件下载地址：下载链接：https://pan.baidu.com/s/1A6McfzgdiZvJ67Co9I9yVA，提取码：rg95。"
+            "text": "插件下载地址：https://pan.baidu.com/s/1A6McfzgdiZvJ67Co9I9yVA，提取码：rg95。"
           },
           {
             "number": 2,
             "text": "安装包解压缩后将IronMan文件夹放到Grasshopper的Libraries文件夹下。位置错误将无法激活。"
           }
         ],
-        "image": null
+        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%872.png"
       },
       {
         "steps": [
@@ -22,16 +22,16 @@ window.siteData = {
             "text": "进入Grasshopper后，用IronMan插件的GhcRegister电池获取本机用户码。"
           }
         ],
-        "image": null
+        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%873.png"
       },
       {
         "steps": [
           {
             "number": 4,
-            "text": "在这里输入用户码，点击按钮生成激活码。"
+            "text": "在这里输入用户码，点击按钮生成激活码。 👉"
           }
         ],
-        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%872.png"
+        "image": "activation-form"
       },
       {
         "steps": [
@@ -40,7 +40,7 @@ window.siteData = {
             "text": "复制激活码并黏贴到IronManLicense.lic文件中替换原始内容。"
           }
         ],
-        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%873.png"
+        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%875.png"
       },
       {
         "steps": [
@@ -53,7 +53,7 @@ window.siteData = {
             "text": "IronMan插件过期后需下载并安装新版本文件。"
           }
         ],
-        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%875.png"
+        "image": "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%876.png"
       }
     ],
     "images": [
