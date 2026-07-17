@@ -3,79 +3,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>激活码生成工具</title>
+    <title>IronMan - Grasshopper 结构设计插件</title>
+    <meta name="description" content="IronMan 是一款面向结构工程师的 Grasshopper 插件，提供 ALC 横条板排布、超限梁柱支撑截面调整等高效设计工具。">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0EA5E9',
+                        secondary: '#38BDF8',
+                        cta: '#F97316',
+                        surface: '#F0F9FF',
+                        brandtext: '#0C4A6E',
+                    },
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        worksans: ['Work Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CryptoJS + 激活逻辑 + 站点数据 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="validity.js"></script>
-    <!-- 使用 Vercount 官方推荐的统计脚本 -->
+    <script src="data.js"></script>
+
+    <!-- 访问统计 -->
     <script defer src="https://events.vercount.one/js"></script>
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: "Microsoft YaHei", Arial, sans-serif; background: #f0f2f5; padding: 40px; }
-        .container { max-width: 520px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
-        h2 { margin-bottom: 8px; color: #333; }
-        .subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
-        textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; resize: vertical; font-size: 14px; }
-        button { width: 100%; padding: 12px; background: #1677ff; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 12px; }
-        button:hover { background: #4096ff; }
-        button:disabled { background: #a0c4ff; cursor: not-allowed; }
-        .result { margin-top: 20px; padding: 15px; border-radius: 4px; display: none; }
-        .result.success { background: #f6ffed; border: 1px solid #b7eb8f; display: block; }
-        .result.error { background: #fff2f0; border: 1px solid #ffccc7; display: block; }
-        .result strong { display: block; margin-bottom: 6px; }
-        .result p { word-break: break-all; font-family: Consolas, monospace; font-size: 13px; color: #333; }
-        .loading { display: none; text-align: center; margin-top: 12px; color: #888; }
-        .visitor-count { text-align: center; margin-top: 20px; font-size: 12px; color: #aaa; }
+        html { scroll-behavior: smooth; }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h2>激活码生成工具</h2>
-        <p class="subtitle">通过 RegistrationManager.GetUserCode() 获取用户码后粘贴到下方</p>
-        <textarea id="userCodeInput" placeholder="请粘贴您的用户码..."></textarea>
-        <button id="submitBtn" onclick="getActivationCode()">生成激活码</button>
-        <div class="loading" id="loadingArea">正在生成，请稍候...</div>
-        <div class="result" id="resultArea">
-            <strong>激活码：</strong>
-            <p id="activationCodeResult"></p>
+<body class="bg-surface text-brandtext font-worksans antialiased">
+
+    <!-- 导航栏：均匀分布，滚动高亮 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-14">
+                <div class="flex items-center justify-between w-full gap-2">
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="nav-btn px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50">
+                        返回顶部
+                    </button>
+                    <a href="#install" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="install">
+                        安装激活
+                    </a>
+                    <a href="#cases" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="cases">
+                        应用案例
+                    </a>
+                    <a href="#links" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="links">
+                        友情链接
+                    </a>
+                    <a href="#partners" class="nav-btn flex-1 text-center px-3 py-2 text-sm font-medium text-brandtext/80 hover:text-primary transition-colors duration-200 rounded-lg hover:bg-gray-50" data-section="partners">
+                        合作单位
+                    </a>
+                </div>
+                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors ml-2" aria-label="打开菜单">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
         </div>
-        <div class="result" id="errorArea">
-            <strong style="color:#ff4d4f;">错误：</strong>
-            <p id="errorMessage" style="color:#ff4d4f;"></p>
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden px-4 pb-4 border-t border-gray-100">
+            <div class="flex flex-col gap-3 pt-3 text-sm font-medium text-brandtext/80">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-left hover:text-primary transition-colors duration-200">返回顶部</button>
+                <a href="#install" class="hover:text-primary transition-colors duration-200">安装激活</a>
+                <a href="#cases" class="hover:text-primary transition-colors duration-200">应用案例</a>
+                <a href="#links" class="hover:text-primary transition-colors duration-200">友情链接</a>
+                <a href="#partners" class="hover:text-primary transition-colors duration-200">合作单位</a>
+            </div>
         </div>
-        <!-- 修正统计显示标签，使用 Vercount 官方 ID -->
-        <p class="visitor-count">
-            本站总访问量 <span id="vercount_value_site_pv">Loading</span> 次
-        </p>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative pt-28 pb-20 lg:pt-36 lg:pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>
+        </div>
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+                        <span class="w-2 h-2 rounded-full bg-primary"></span>
+                        Grasshopper 结构设计插件
+                    </div>
+                    <h1 class="font-outfit text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-brandtext mb-6">
+                        让结构设计<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">更高效、更智能</span>
+                    </h1>
+                    <p class="text-lg text-brandtext/70 mb-8 max-w-lg leading-relaxed">
+                        IronMan 插件为建筑师与结构工程师提供 ALC 横条板排布、构件截面优化等 Grasshopper 脚本工具，助力参数化设计落地。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a id="heroDownloadBtn" href="#" class="inline-flex items-center px-6 py-3 rounded-xl bg-cta text-white font-semibold hover:bg-orange-600 transition-colors duration-200 shadow-lg shadow-orange-500/25 cursor-pointer">
+                            下载插件
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </a>
+                        <a href="#install" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-brandtext font-semibold border border-gray-200 hover:border-primary hover:text-primary transition-colors duration-200 cursor-pointer">
+                            立即激活
+                        </a>
+                        <a href="#cases" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-brandtext font-semibold border border-gray-200 hover:border-primary hover:text-primary transition-colors duration-200 cursor-pointer">
+                            查看案例
+                        </a>
+                    </div>
+                </div>
+                <div class="fade-in relative flex justify-center lg:justify-end" style="transition-delay: 100ms;">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl blur-2xl"></div>
+                        <div class="relative rounded-3xl shadow-2xl border-4 border-white bg-white/50 overflow-hidden" style="width: min(90vw, 560px); aspect-ratio: 977 / 337;">
+                            <img src="插件logo/精钢侠头像.png" alt="精钢侠头像" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 安装与激活 -->
+    <section id="install" class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
+                <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">安装与激活</h2>
+                <p class="text-brandtext/70">按照以下步骤完成插件安装，并在下方输入用户码生成激活码。</p>
+            </div>
+
+            <!-- 图文步骤 -->
+            <div id="installSteps" class="space-y-16 mb-16 fade-in">
+                <!-- 由 JS 渲染 -->
+            </div>
+
+            <!-- 激活码生成 -->
+            <div class="max-w-xl mx-auto bg-white rounded-2xl p-8 shadow-lg border border-primary/10 fade-in">
+                <h3 class="font-outfit text-xl font-semibold text-brandtext mb-2">激活码生成</h3>
+                <p class="text-sm text-brandtext/60 mb-6">通过 IronMan 插件的 GhcRegister 电池获取本机用户码后粘贴到下方。</p>
+                <textarea id="userCodeInput" class="w-full h-28 p-4 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-y text-sm" placeholder="请粘贴您的用户码..."></textarea>
+                <button id="submitBtn" onclick="getActivationCode()" class="w-full mt-4 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-sky-600 transition-colors duration-200 disabled:bg-primary/50 disabled:cursor-not-allowed cursor-pointer">
+                    生成激活码
+                </button>
+                <div id="loadingArea" class="hidden text-center mt-3 text-sm text-brandtext/60">正在生成，请稍候...</div>
+                <div id="resultArea" class="hidden mt-4 p-4 rounded-xl bg-green-50 border border-green-200">
+                    <strong class="block text-green-800 mb-1">激活码：</strong>
+                    <p id="activationCodeResult" class="break-all font-mono text-sm text-green-900"></p>
+                </div>
+                <div id="errorArea" class="hidden mt-4 p-4 rounded-xl bg-red-50 border border-red-200">
+                    <strong class="block text-red-800 mb-1">错误：</strong>
+                    <p id="errorMessage" class="text-sm text-red-700"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 应用案例 -->
+    <section id="cases" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
+                <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">应用案例展示</h2>
+                <p class="text-brandtext/70">IronMan 插件在实际项目中的应用效果，图片与说明随文件夹内容自动同步。</p>
+            </div>
+            <div id="caseStudies" class="space-y-12">
+                <!-- 由 JS 渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 友情链接 -->
+    <section id="links" class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
+                <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">友情链接</h2>
+                <p class="text-brandtext/70">扫描二维码关注我们的视频号与公众号，获取更多教程资讯。</p>
+            </div>
+            <div id="qrCodes" class="grid grid-cols-2 md:grid-cols-4 gap-6 fade-in">
+                <!-- 由 JS 渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 合作单位 -->
+    <section id="partners" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
+                <h2 class="font-outfit text-3xl md:text-4xl font-bold text-brandtext mb-4">合作单位</h2>
+                <p class="text-brandtext/70">携手行业伙伴，共同推动结构设计的数字化升级。</p>
+            </div>
+            <div id="partnersList" class="flex flex-wrap justify-center items-center gap-8 md:gap-12 fade-in">
+                <!-- 由 JS 渲染 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-brandtext text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4 font-outfit font-bold text-lg">
+                <img src="插件logo/精钢侠头像.png" alt="精钢侠" class="w-8 h-8 rounded-full object-contain bg-white/20">
+                IronMan
+            </div>
+            <p class="text-white/60 text-sm mb-4">Grasshopper 结构设计插件</p>
+            <p class="text-white/40 text-xs">
+                本站总访问量 <span id="vercount_value_site_pv">Loading</span> 次
+            </p>
+        </div>
+    </footer>
+
+    <!-- 图片灯箱 -->
+    <div id="lightbox" class="fixed inset-0 z-[60] hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" alt="放大查看" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+        <button class="absolute top-4 right-4 text-white/80 hover:text-white p-2" aria-label="关闭">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
     </div>
 
     <script>
+        // 移动端菜单切换
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // HTML 转义
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 灯箱
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // 设置 Hero 下载按钮链接
+        function renderHeroDownload() {
+            const url = window.siteData?.installGuide?.downloadUrl;
+            if (url) {
+                const btn = document.getElementById('heroDownloadBtn');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.rel = 'noopener noreferrer';
+            }
+        }
+
+        // 渲染安装步骤（分组布局）
+        function renderInstallSteps() {
+            const container = document.getElementById('installSteps');
+            const guide = window.siteData?.installGuide;
+            if (!guide) return;
+            const groups = guide.stepGroups || [];
+
+            // 统一图片高度（与图片2一致）
+            const IMG_HEIGHT = '280px';
+
+            container.innerHTML = groups.map((group, index) => {
+                const steps = group.steps || [];
+                const imgSrc = group.image;
+                const isReversed = index % 2 === 1;
+
+                // 步骤文字列
+                const stepsHtml = steps.map(step => {
+                    // 将下载链接转为可点击链接
+                    let text = escapeHtml(step.text);
+                    const urlMatch = text.match(/(https?:\/\/[^\s，。、]+)/);
+                    if (urlMatch) {
+                        text = text.replace(urlMatch[1], `<a href="${urlMatch[1]}" target="_blank" rel="noopener noreferrer" class="text-primary underline hover:text-brandtext transition-colors">${urlMatch[1]}</a>`);
+                    }
+                    return `
+                        <div class="flex items-start gap-3">
+                            <span class="flex-shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-outfit font-bold text-sm mt-0.5">${step.number}</span>
+                            <p class="text-brandtext/80 leading-relaxed">${text}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                // 图片列
+                const imageHtml = imgSrc
+                    ? `<div style="width: 100%; border-radius: 0.75rem; overflow: hidden; background-color: white; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;" onclick="openLightbox('${imgSrc}')">
+                        <img src="${imgSrc}" alt="步骤配图" style="width: 100%; height: ${IMG_HEIGHT}; object-fit: contain;">
+                       </div>`
+                    : `<div style="height: ${IMG_HEIGHT}; width: 100%; border-radius: 0.75rem; background-color: #f9fafb; border: 1px dashed #e5e7eb; display: flex; align-items: center; justify-content: center; color: rgba(12, 74, 110, 0.3); font-size: 0.875rem;">暂无配图</div>`;
+
+                return `
+                    <div class="grid lg:grid-cols-2 gap-8 items-stretch" style="width: 100%; display: grid; grid-template-columns: 1fr 1fr;">
+                        <div class="${isReversed ? 'lg:order-2' : ''} flex flex-col justify-center gap-6 py-2" style="min-width: 0;">
+                            ${stepsHtml}
+                        </div>
+                        <div class="${isReversed ? 'lg:order-1' : ''}" style="min-width: 0; width: 100%;">
+                            ${imageHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 滚动高亮导航
+        function setupScrollSpy() {
+            const sections = ['install', 'cases', 'links', 'partners'];
+            const navBtns = document.querySelectorAll('.nav-btn[data-section]');
+            const navHeight = 60;
+
+            function updateActive() {
+                const scrollY = window.scrollY + navHeight + 100;
+                let current = '';
+                for (const id of sections) {
+                    const el = document.getElementById(id);
+                    if (el && el.offsetTop <= scrollY) {
+                        current = id;
+                    }
+                }
+                navBtns.forEach(btn => {
+                    if (btn.dataset.section === current) {
+                        btn.classList.add('text-primary', 'bg-primary/5', 'font-semibold');
+                        btn.classList.remove('text-brandtext/80');
+                    } else {
+                        btn.classList.remove('text-primary', 'bg-primary/5', 'font-semibold');
+                        btn.classList.add('text-brandtext/80');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActive, { passive: true });
+            updateActive();
+        }
+
+        // 渲染应用案例
+        function renderCaseStudies() {
+            const container = document.getElementById('caseStudies');
+            const cases = window.siteData?.caseStudies || [];
+            if (cases.length === 0) {
+                container.innerHTML = '<p class="text-center text-brandtext/50">暂无应用案例</p>';
+                return;
+            }
+            container.innerHTML = cases.map((item, index) => `
+                <article class="bg-surface rounded-2xl p-6 md:p-8 border border-primary/10 fade-in">
+                    <div class="grid lg:grid-cols-2 gap-8 items-center">
+                        <div class="order-2 ${index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'}">
+                            <h3 class="font-outfit text-2xl font-bold text-brandtext mb-4">${escapeHtml(item.title)}</h3>
+                            <p class="text-brandtext/70 leading-relaxed">${escapeHtml(item.description).replace(/\n/g, '<br>')}</p>
+                        </div>
+                        <div class="order-1 ${index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                ${item.images.map(src => `
+                                    <div class="aspect-video rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer group" onclick="openLightbox('${src}')">
+                                        <img src="${src}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // 渲染二维码（缩小20%）
+        function renderQrCodes() {
+            const container = document.getElementById('qrCodes');
+            const items = window.siteData?.qrCodes || [];
+            if (items.length === 0) {
+                container.innerHTML = '<p class="col-span-full text-center text-brandtext/50">暂无二维码</p>';
+                return;
+            }
+            container.innerHTML = items.map(item => `
+                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 text-center">
+                    <div class="aspect-square rounded-xl overflow-hidden bg-gray-50 mb-3 mx-auto" style="width: 80%; max-width: 200px;">
+                        <img src="${item.src}" alt="${escapeHtml(item.name)}" class="w-full h-full object-contain">
+                    </div>
+                    <p class="text-sm font-medium text-brandtext">${escapeHtml(item.name)}</p>
+                </div>
+            `).join('');
+        }
+
+        // 渲染合作单位
+        function renderPartners() {
+            const container = document.getElementById('partnersList');
+            const items = window.siteData?.partners || [];
+            if (items.length === 0) {
+                container.innerHTML = '<p class="text-center text-brandtext/50">暂无合作单位</p>';
+                return;
+            }
+            container.innerHTML = items.map(item => `
+                <div class="group flex flex-col items-center gap-3 max-w-[200px]">
+                    <div class="w-32 h-20 md:w-40 md:h-24 rounded-xl bg-white border border-gray-100 p-3 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-200">
+                        <img src="${item.src}" alt="${escapeHtml(item.name)}" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <p class="text-xs md:text-sm text-brandtext/70 text-center">${escapeHtml(item.name)}</p>
+                </div>
+            `).join('');
+        }
+
+        // 激活码生成
         function getActivationCode() {
             const userCode = document.getElementById('userCodeInput').value.trim();
             if (!userCode) { alert('请先输入用户码'); return; }
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            document.getElementById('loadingArea').style.display = 'block';
-            document.getElementById('resultArea').className = 'result';
-            document.getElementById('errorArea').className = 'result';
+            document.getElementById('loadingArea').classList.remove('hidden');
+            document.getElementById('resultArea').classList.add('hidden');
+            document.getElementById('errorArea').classList.add('hidden');
 
             try {
                 const activationCode = generateVipCode(userCode);
                 if (activationCode) {
                     document.getElementById('activationCodeResult').textContent = activationCode;
-                    document.getElementById('resultArea').className = 'result success';
+                    document.getElementById('resultArea').classList.remove('hidden');
                 } else {
                     document.getElementById('errorMessage').textContent = '用户码无效，请检查后重新输入';
-                    document.getElementById('errorArea').className = 'result error';
+                    document.getElementById('errorArea').classList.remove('hidden');
                 }
             } catch (error) {
                 document.getElementById('errorMessage').textContent = '生成失败：' + error.message;
-                document.getElementById('errorArea').className = 'result error';
+                document.getElementById('errorArea').classList.remove('hidden');
             } finally {
                 btn.disabled = false;
-                document.getElementById('loadingArea').style.display = 'none';
+                document.getElementById('loadingArea').classList.add('hidden');
             }
         }
+
+        // 滚动渐入动画
+        function observeFades() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeroDownload();
+            renderInstallSteps();
+            renderCaseStudies();
+            renderQrCodes();
+            renderPartners();
+            observeFades();
+            setupScrollSpy();
+        });
     </script>
 </body>
 </html>
