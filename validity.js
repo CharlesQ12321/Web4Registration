@@ -7,11 +7,11 @@
  * 依赖：CryptoJS（需在全局作用域中可用）
  */
 
-// DES 密钥和向量（与原 RegistrationManager.dll 完全一致）
-const CLIENT_KEY = CryptoJS.enc.Utf8.parse(String.fromCharCode(1, 3, 5, 7, 9, 11, 13, 15));
-const CLIENT_IV  = CryptoJS.enc.Utf8.parse(String.fromCharCode(17, 19, 21, 23, 25, 27, 29, 31));
-const SERVER_KEY = CryptoJS.enc.Utf8.parse(String.fromCharCode(2, 4, 6, 8, 10, 12, 14, 16));
-const SERVER_IV  = CryptoJS.enc.Utf8.parse(String.fromCharCode(18, 20, 22, 24, 26, 28, 30, 32));
+// DES 密钥和向量从 shared/crypto-config.json 生成，见 crypto-config.js
+const CLIENT_KEY = window.CRYPTO_CONFIG.CLIENT_KEY;
+const CLIENT_IV  = window.CRYPTO_CONFIG.CLIENT_IV;
+const SERVER_KEY = window.CRYPTO_CONFIG.SERVER_KEY;
+const SERVER_IV  = window.CRYPTO_CONFIG.SERVER_IV;
 
 /**
  * Client 端 DES 解密：将用户码解密为硬件信息字符串

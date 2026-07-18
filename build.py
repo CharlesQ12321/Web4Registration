@@ -6,6 +6,7 @@ from urllib.parse import quote
 
 ROOT = Path(__file__).parent
 
+
 def url_path(rel: str) -> str:
     return "/".join(quote(part, safe="") for part in rel.replace("\\", "/").split("/"))
 

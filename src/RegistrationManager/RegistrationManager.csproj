@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>RegistrationManager</AssemblyName>
+    <RootNamespace>RegistrationManager</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Management" />
+  </ItemGroup>
+
+  <Target Name="GenerateCryptoConfig"
+          BeforeTargets="BeforeBuild"
+          Inputs="$(MSBuildProjectDirectory)\..\..\shared\crypto-config.json"
+          Outputs="$(MSBuildProjectDirectory)\CryptoConfig.cs;$(MSBuildProjectDirectory)\..\..\crypto-config.js">
+    <Exec Command="python &quot;$(MSBuildProjectDirectory)\..\..\tools\generate_crypto.py&quot;" />
+  </Target>
+
+</Project>

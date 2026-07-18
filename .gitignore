@@ -8,3 +8,16 @@
 # OS
 .DS_Store
 Thumbs.db
+
+# .NET build outputs
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+*.user
+*.suo
+
+# Python
+__pycache__/
+*.pyc
