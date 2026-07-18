@@ -6,10 +6,6 @@ window.siteData = {
         "steps": [
           {
             "number": 1,
-            "text": "插件下载地址：https://pan.baidu.com/s/1A6McfzgdiZvJ67Co9I9yVA，提取码：rg95。"
-          },
-          {
-            "number": 2,
             "text": "安装包解压缩后将IronMan文件夹放到Grasshopper的Libraries文件夹下。位置错误将无法激活。"
           }
         ],
@@ -18,7 +14,7 @@ window.siteData = {
       {
         "steps": [
           {
-            "number": 3,
+            "number": 2,
             "text": "进入Grasshopper后，用IronMan插件的GhcRegister电池获取本机用户码。"
           }
         ],
@@ -27,7 +23,7 @@ window.siteData = {
       {
         "steps": [
           {
-            "number": 4,
+            "number": 3,
             "text": "在这里输入用户码，点击按钮生成激活码。 👉"
           }
         ],
@@ -36,7 +32,7 @@ window.siteData = {
       {
         "steps": [
           {
-            "number": 5,
+            "number": 4,
             "text": "复制激活码并黏贴到IronManLicense.lic文件中替换原始内容。"
           }
         ],
@@ -45,11 +41,11 @@ window.siteData = {
       {
         "steps": [
           {
-            "number": 6,
+            "number": 5,
             "text": "重新加载Grasshopper，用IronMan插件的ValidityPeriod电池查看插件有效期。"
           },
           {
-            "number": 7,
+            "number": 6,
             "text": "IronMan插件过期后需下载并安装新版本文件。"
           }
         ],
@@ -62,7 +58,7 @@ window.siteData = {
       "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%875.png",
       "%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BB%E8%AF%B4%E6%98%8E/%E5%9B%BE%E7%89%876.png"
     ],
-    "downloadUrl": "https://pan.baidu.com/s/1A6McfzgdiZvJ67Co9I9yVA",
+    "downloadUrl": "https://pan.baidu.com/s/1A6McfzgdiZvJ67Co9I9yVA?pwd=rg95",
     "downloadCode": "rg95"
   },
   "caseStudies": [
@@ -98,8 +94,9 @@ window.siteData = {
   ],
   "partners": [
     {
-      "name": "浙江精工钢结构集团有限公司",
-      "src": "%E5%90%88%E4%BD%9C%E5%8D%95%E4%BD%8D/%E6%B5%99%E6%B1%9F%E7%B2%BE%E5%B7%A5%E9%92%A2%E7%BB%93%E6%9E%84%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8.png"
+      "name": "精工钢构集团",
+      "src": "%E5%90%88%E4%BD%9C%E5%8D%95%E4%BD%8D/%E7%B2%BE%E5%B7%A5%E9%92%A2%E7%BB%93%E6%9E%84%E9%9B%86%E5%9B%A2.png",
+      "url": "https://www.600496.com/"
     }
   ]
 };
